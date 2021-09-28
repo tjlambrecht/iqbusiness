@@ -1,27 +1,30 @@
 package com.iqbusiness;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
+import java.util.concurrent.TimeoutException;
+
+import com.iqbusiness.messagequeue.receivers.NameReceiver;
+import com.iqbusiness.messagequeue.receivers.core.MessageReceiver;
 import com.rabbitmq.client.DeliverCallback;
 
 public class Console2 {
-	private final static String QUEUE_NAME = "name";
 	private final static String MESSAGE_PREFIX = "Hello my name is, ";
 	private final static String RESPONSE_PREFIX = "Hello ";
 	private final static String RESPONSE_SUFFIX = ", I am your father!";
-	private final static String HOST = "localhost";
 	
-	public static void main(String[] args) throws Exception {
-        var connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(HOST);
-        
-        var connection = connectionFactory.newConnection();
-
-        var channel = connection.createChannel();
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
+	private NameReceiver nameReceiver;
+	
+	public Console2() {
+		nameReceiver = new NameReceiver(new MessageReceiver());
+	}
+	
+	private void run() throws IOException, TimeoutException {
+        var deliverCallback = createDeliverCallback();
+        nameReceiver.listen(deliverCallback);
+	}
+	
+	private DeliverCallback createDeliverCallback() {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             var message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 			if (message.contains(MESSAGE_PREFIX)) {
@@ -30,6 +33,11 @@ public class Console2 {
 				System.out.println(response);
 			}
         };
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+        return deliverCallback;	
+	}
+	
+	public static void main(String[] args) throws Exception {
+		var console2 = new Console2();
+		console2.run();
 	}
 }
