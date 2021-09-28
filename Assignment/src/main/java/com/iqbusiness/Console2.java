@@ -26,21 +26,21 @@ public class Console2 {
 		
 		System.out.println("# Listening for messages...");
 		var callback = new Console2Callback();
-        nameReceiver.listen(callback);
+    	nameReceiver.listen(callback);
 	}
 	
 	private class Console2Callback implements MessageReceiverCallback {
 		@Override
 		public void callback(String message) {
-    		System.out.println("# Received message:");
-            var name = receivedMessageHelper.getNameFromMessage(message);
-            if (name == null) {
-    			System.out.println("# Incorrect message format");
-    			return;
-            }
+			System.out.println("# Received message:");
+			var name = receivedMessageHelper.getNameFromMessage(message);
+			if (name == null) {
+				System.out.println("# Incorrect message format");
+				return;
+			}
             
-    		var response = receivedMessageHelper.generateResponseFromName(name);
-            System.out.println(response);
+			var response = receivedMessageHelper.generateResponseFromName(name);
+			System.out.println(response);
 		}
 	}
 	
