@@ -1,28 +1,41 @@
 package com.iqbusiness;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
+import com.iqbusiness.messagequeue.senders.NameSender;
+import com.iqbusiness.messagequeue.senders.core.MessageSender;
 
 public class Console1 {
-	private final static String QUEUE_NAME = "iqbusiness";
+	private NameSender nameSender;
 	
-	public static void main(String[] args) throws Exception {
+	public Console1() {
+		nameSender = new NameSender(new MessageSender());
+	}
+	
+	private void run() throws Exception {
+		System.out.println("# Console 1 - Started");
+		System.out.println("# Please enter you name:");
+
+		var message = getMessageFromConsole();
+
+		System.out.println("# Sending message:");
+		System.out.println(message);
+		
+		nameSender.send(message);
+
+		System.out.println("# Finished");
+	}
+	
+	private String getMessageFromConsole() throws IOException {
 		var bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		var name = bufferedReader.readLine();
 		var message = "Hello my name is, " + name;
-
-		System.out.println(message);
-		
-		var connectionFactory = new ConnectionFactory();
-		connectionFactory.setHost("localhost");
-		
-		try (var connection = connectionFactory.newConnection(); var channel = connection.createChannel()) {
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-		}
+		return message;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		var console1 = new Console1();
+		console1.run();
 	}
 }

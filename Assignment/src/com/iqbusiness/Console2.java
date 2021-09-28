@@ -7,7 +7,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 
 public class Console2 {
-	private final static String QUEUE_NAME = "iqbusiness";
+	private final static String QUEUE_NAME = "name";
 	private final static String MESSAGE_PREFIX = "Hello my name is, ";
 	private final static String RESPONSE_PREFIX = "Hello ";
 	private final static String RESPONSE_SUFFIX = ", I am your father!";
