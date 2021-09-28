@@ -10,14 +10,14 @@ import com.rabbitmq.client.DeliverCallback;
 
 public class MessageReceiver {
 	public void listen(MessageReceiverCallback messageReceiverCallback, String messageQueueName) throws IOException, TimeoutException {
-        var connectionFactory = new ConnectionFactory();
+		var connectionFactory = new ConnectionFactory();
         connectionFactory.setHost(Constants.MESSAGE_QUEUE_HOST);
         
-        var connection = connectionFactory.newConnection();
+    	var connection = connectionFactory.newConnection();
 
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            var message = new String(delivery.getBody(), StandardCharsets.UTF_8);            
-            messageReceiverCallback.callback(message);
+    	DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+        	var message = new String(delivery.getBody(), StandardCharsets.UTF_8);            
+        	messageReceiverCallback.callback(message);
         };
         
         var channel = connection.createChannel();
