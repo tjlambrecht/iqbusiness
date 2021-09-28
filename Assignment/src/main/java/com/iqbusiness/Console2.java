@@ -23,16 +23,14 @@ public class Console2 {
 	private void run() throws IOException, TimeoutException {
 		System.out.println("# Console 2 - Started");
 		
-		System.out.println("# Listening for messages.");
+		System.out.println("# Listening for messages...");
 		var deliverCallback = createDeliverCallback();
         nameReceiver.listen(deliverCallback);
-        
-		System.out.println("# Finished");
 	}
 
 	private DeliverCallback createDeliverCallback() {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-    		System.out.println("# Received message.");
+    		System.out.println("# Received message:");
             var message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             
             var name = receivedMessageHelper.getNameFromMessage(message);
