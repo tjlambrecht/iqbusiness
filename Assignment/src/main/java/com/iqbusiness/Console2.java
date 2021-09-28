@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 import com.iqbusiness.helpers.ReceivedMessageHelper;
 import com.iqbusiness.messagequeue.receivers.NameReceiver;
 import com.iqbusiness.messagequeue.receivers.core.MessageReceiver;
+import com.iqbusiness.messagequeue.receivers.core.MessageReceiverCallback;
 import com.rabbitmq.client.DeliverCallback;
 
 public class Console2 {
@@ -24,15 +25,14 @@ public class Console2 {
 		System.out.println("# Console 2 - Started");
 		
 		System.out.println("# Listening for messages...");
-		var deliverCallback = createDeliverCallback();
-        nameReceiver.listen(deliverCallback);
+		var callback = new Console2Callback();
+        nameReceiver.listen(callback);
 	}
-
-	private DeliverCallback createDeliverCallback() {
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+	
+	private class Console2Callback implements MessageReceiverCallback {
+		@Override
+		public void callback(String message) {
     		System.out.println("# Received message:");
-            var message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            
             var name = receivedMessageHelper.getNameFromMessage(message);
             if (name == null) {
     			System.out.println("# Incorrect message format");
@@ -41,8 +41,7 @@ public class Console2 {
             
     		var response = receivedMessageHelper.generateResponseFromName(name);
             System.out.println(response);
-        };
-        return deliverCallback;	
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {

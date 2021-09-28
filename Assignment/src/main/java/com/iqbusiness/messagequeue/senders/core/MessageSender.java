@@ -12,9 +12,10 @@ public class MessageSender {
 		var connectionFactory = new ConnectionFactory();
 		connectionFactory.setHost(Constants.MESSAGE_QUEUE_HOST);
 		
-		try (var connection = connectionFactory.newConnection(); var channel = connection.createChannel()) {
-			channel.queueDeclare(messageQueueName, false, false, false, null);
-			channel.basicPublish("", messageQueueName, null, message.getBytes(StandardCharsets.UTF_8));
-		}
+		var connection = connectionFactory.newConnection();
+		
+		var channel = connection.createChannel();	
+		channel.queueDeclare(messageQueueName, false, false, false, null);
+		channel.basicPublish("", messageQueueName, null, message.getBytes(StandardCharsets.UTF_8));
 	}
 }

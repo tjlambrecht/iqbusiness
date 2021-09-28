@@ -3,7 +3,7 @@ package com.iqbusiness.messagequeue.receivers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import com.iqbusiness.messagequeue.receivers.core.MessageReceiver;
-import com.rabbitmq.client.DeliverCallback;
+import com.iqbusiness.messagequeue.receivers.core.MessageReceiverCallback;
 
 public class NameReceiver {
 	private static final String MESSAGE_QUEUE_NAME = "name";
@@ -13,7 +13,7 @@ public class NameReceiver {
 		this.messageReceiver = messageReceiver;	
 	}
 	
-	public void listen(DeliverCallback deliverCallback) throws IOException, TimeoutException {
-		messageReceiver.listen(deliverCallback, MESSAGE_QUEUE_NAME);
+	public void listen(MessageReceiverCallback messageReceiverCallback) throws IOException, TimeoutException {
+		messageReceiver.listen(messageReceiverCallback, MESSAGE_QUEUE_NAME);
 	}
 }
