@@ -16,19 +16,19 @@ public class ReceivedMessageHelperTests {
     }
     
     @Test
-    void getNameFromMessage_whenValid_thenName() {
+    void getNameFromMessage_whenValidMessage_thenName() {
     	var name = receivedMessageHelper.getNameFromMessage("Hello my name is, Luke");
         assertTrue(name.equals("Luke"));
     }
 
     @Test
-    void getNameFromMessage_whenInvalid_thenNull() {
+    void getNameFromMessage_whenInvalidMessage_thenNull() {
     	var name = receivedMessageHelper.getNameFromMessage("Hello my name is Luke");
         assertTrue(name == null);
     }
 
     @Test
-    void generateResponseFromName_whenValid_thenResponse() {
+    void generateResponseFromName_whenValidName_thenResponse() {
     	var response = receivedMessageHelper.generateResponseFromName("Luke");
         assertTrue(response.equals("Hello Luke, I am your father!"));
     }

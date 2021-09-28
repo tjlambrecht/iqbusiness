@@ -21,17 +21,23 @@ public class Console2 {
 	}
 	
 	private void run() throws IOException, TimeoutException {
-        var deliverCallback = createDeliverCallback();
+		System.out.println("# Console 2 - Started");
+		
+		System.out.println("# Listening for messages.");
+		var deliverCallback = createDeliverCallback();
         nameReceiver.listen(deliverCallback);
+        
+		System.out.println("# Finished");
 	}
 
 	private DeliverCallback createDeliverCallback() {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            var message = new String(delivery.getBody(), StandardCharsets.UTF_8);           
+    		System.out.println("# Received message.");
+            var message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             
             var name = receivedMessageHelper.getNameFromMessage(message);
             if (name == null) {
-    			System.out.println("# Incorrect message format received");
+    			System.out.println("# Incorrect message format");
     			return;
             }
             
