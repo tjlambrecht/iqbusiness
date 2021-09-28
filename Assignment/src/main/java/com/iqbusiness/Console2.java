@@ -26,7 +26,7 @@ public class Console2 {
 		
 		System.out.println("# Listening for messages...");
 		var callback = new Console2Callback();
-    	nameReceiver.listen(callback);
+		nameReceiver.listen(callback);
 	}
 	
 	private class Console2Callback implements MessageReceiverCallback {
